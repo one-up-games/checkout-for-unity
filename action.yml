@@ -111,5 +111,6 @@ runs:
 
     - name: Reset Working Copy
       if: ${{ inputs.clean }} == 'false'
+      shell: bash
       run: |
         git clean -ffdx -e Library && git reset --hard HEAD
