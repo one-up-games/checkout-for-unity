@@ -114,3 +114,8 @@ runs:
       shell: bash
       run: |
         git clean -ffdx -e Library && git reset --hard HEAD
+        
+    - name: Git Status
+      shell: bash
+      run: |
+        git status
