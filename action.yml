@@ -107,6 +107,7 @@ runs:
       with:
         fetch-depth: ${{ inputs.fetch-depth }}
         lfs: true
+        ref: ${{ inputs.ref }}
         clean: ${{ inputs.clean }}
 
     - name: Reset Working Copy
@@ -119,3 +120,4 @@ runs:
       shell: bash
       run: |
         git status
+
