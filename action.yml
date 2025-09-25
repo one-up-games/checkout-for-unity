@@ -103,7 +103,7 @@ runs:
   using: 'composite'
   steps:
     - name: Checkout
-      uses: actions/checkout@v4.2.2
+      uses: actions/checkout@v4.3.0
       with:
         fetch-depth: ${{ inputs.fetch-depth }}
         lfs: true
@@ -120,4 +120,5 @@ runs:
       shell: bash
       run: |
         git status
+
 
