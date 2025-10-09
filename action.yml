@@ -111,6 +111,7 @@ runs:
         clean: ${{ inputs.clean }}
 
     - name: Find missing lfs files
+      if: failure()
       shell: bash
       run: |
         chmod +x "${{ github.action_path }}/find_missing_lfs.sh"
@@ -126,6 +127,7 @@ runs:
       shell: bash
       run: |
         git status
+
 
 
 
