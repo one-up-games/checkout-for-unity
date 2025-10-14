@@ -102,12 +102,6 @@ inputs:
 runs:
   using: 'composite'
   steps:
-
-    - name: Reset Working Copy
-      if: ${{ inputs.clean }} == 'false'
-      shell: bash
-      run: |
-        git clean -ffdx -e Library && git reset --hard HEAD
         
     - name: Checkout
       uses: actions/checkout@v4.3.0
@@ -124,11 +118,18 @@ runs:
       shell: bash
       run: |
         git lfs logs last || true
+
+    - name: Reset Working Copy
+      if: ${{ inputs.clean }} == 'false'
+      shell: bash
+      run: |
+        git clean -ffdx -e Library && git reset --hard HEAD
         
     - name: Git Status
       shell: bash
       run: |
         git status
+
 
 
 
