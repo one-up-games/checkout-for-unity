@@ -117,11 +117,21 @@ runs:
         ref: ${{ inputs.ref }}
         clean: ${{ inputs.clean }}
         filter: '' # disable partial clone
+
+    - name: Ensure LFS objects are available
+      if: failure()
+      run: |
+        git lfs install --force
+        git config --unset-all remote.origin.promisor || true
+        git config --unset-all remote.origin.partialclonefilter || true
+        git lfs fetch --all
+        git lfs checkout
         
     - name: Git Status
       shell: bash
       run: |
         git status
+
 
 
 
