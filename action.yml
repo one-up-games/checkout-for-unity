@@ -102,31 +102,26 @@ inputs:
 runs:
   using: 'composite'
   steps:
+
+    - name: Reset Working Copy
+      if: ${{ inputs.clean }} == 'false'
+      shell: bash
+      run: |
+        git clean -ffdx -e Library && git reset --hard HEAD
+        
     - name: Checkout
       uses: actions/checkout@v4.3.0
       with:
         fetch-depth: ${{ inputs.fetch-depth }}
         lfs: ${{ inputs.lfs }}
         ref: ${{ inputs.ref }}
-        clean: ${{ inputs.clean }}
-
-    - name: Find missing lfs files
-      if: failure()
-      shell: bash
-      run: |
-        chmod +x "${{ github.action_path }}/find_missing_lfs.sh"
-        "${{ github.action_path }}/find_missing_lfs.sh"
-        
-    - name: Reset Working Copy
-      if: ${{ inputs.clean }} == 'false'
-      shell: bash
-      run: |
-        git clean -ffdx -e Library && git reset --hard HEAD        
+        clean: ${{ inputs.clean }}        
         
     - name: Git Status
       shell: bash
       run: |
         git status
+
 
 
 
