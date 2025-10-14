@@ -112,7 +112,7 @@ runs:
     - name: Checkout
       uses: actions/checkout@v4.3.0
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ github.token }}
         fetch-depth: ${{ inputs.fetch-depth }}
         lfs: ${{ inputs.lfs }}
         ref: ${{ inputs.ref }}
@@ -122,6 +122,7 @@ runs:
       shell: bash
       run: |
         git status
+
 
 
 
