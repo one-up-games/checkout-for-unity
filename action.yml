@@ -118,11 +118,18 @@ runs:
         ref: ${{ inputs.ref }}
         clean: ${{ inputs.clean }}
         filter: ''
+
+    - Show last git logs
+      if: failure()
+      shell: bash
+      run: |
+        git lfs logs last || true
         
     - name: Git Status
       shell: bash
       run: |
         git status
+
 
 
 
