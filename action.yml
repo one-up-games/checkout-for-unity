@@ -120,6 +120,7 @@ runs:
         filter: ''
 
     - name: Validate Git integrity
+      if: failure()
       shell: bash
       run: |
         echo "🧩 Running git fsck..."
@@ -140,6 +141,7 @@ runs:
       shell: bash
       run: |
         git status
+
 
 
 
