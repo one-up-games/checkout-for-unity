@@ -112,26 +112,17 @@ runs:
     - name: Checkout
       uses: actions/checkout@v4.3.0
       with:
-        fetch-depth: 0
+        token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: ${{ inputs.fetch-depth }}
         lfs: ${{ inputs.lfs }}
         ref: ${{ inputs.ref }}
         clean: ${{ inputs.clean }}
-        filter: '' # disable partial clone
-
-    - name: Ensure LFS objects are available
-      if: failure()
-      shell: bash
-      run: |
-        git lfs install --force
-        git config --unset-all remote.origin.promisor || true
-        git config --unset-all remote.origin.partialclonefilter || true
-        git lfs fetch --all
-        git lfs checkout
         
     - name: Git Status
       shell: bash
       run: |
         git status
+
 
 
 
