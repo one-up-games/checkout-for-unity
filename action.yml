@@ -119,6 +119,17 @@ runs:
         clean: ${{ inputs.clean }}
         filter: ''
 
+    - name: Validate Git integrity
+      shell: bash
+      run: |
+        echo "🧩 Running git fsck..."
+        if ! git fsck --full; then
+          echo "⚠️ Detected corruption. Cleaning packs and retrying fetch..."
+          rm -rf .git/objects/pack/* || true
+          git fetch --all --prune --tags --force || true
+          git lfs fetch --all || true
+        fi
+
     - name: Show last git logs
       if: failure()
       shell: bash
@@ -129,6 +140,7 @@ runs:
       shell: bash
       run: |
         git status
+
 
 
 
