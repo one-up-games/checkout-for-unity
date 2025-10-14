@@ -120,6 +120,7 @@ runs:
 
     - name: Ensure LFS objects are available
       if: failure()
+      shell: bash
       run: |
         git lfs install --force
         git config --unset-all remote.origin.promisor || true
@@ -131,6 +132,7 @@ runs:
       shell: bash
       run: |
         git status
+
 
 
 
