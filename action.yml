@@ -119,7 +119,7 @@ runs:
         clean: ${{ inputs.clean }}
         filter: ''
 
-    - Show last git logs
+    - name: Show last git logs
       if: failure()
       shell: bash
       run: |
@@ -129,6 +129,7 @@ runs:
       shell: bash
       run: |
         git status
+
 
 
 
