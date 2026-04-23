@@ -26,6 +26,7 @@ runs:
       run: |
         # prevent fatal errors on fresh runners
         git clean -ffdx -e Library || true
+        git rm --cached -r . || true
         git reset --hard HEAD || true
         
     - name: Checkout
