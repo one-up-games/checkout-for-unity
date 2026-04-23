@@ -19,6 +19,14 @@ inputs:
 runs:
   using: 'composite'
   steps:
+
+    - name: Reset Working Copy
+      if: ${{ inputs.clean == 'false' }} 
+      shell: bash
+      run: |
+        # prevent fatal errors on fresh runners
+        git clean -ffdx -e Library || true
+        git reset --hard HEAD || true
         
     - name: Checkout
       uses: actions/checkout@v5
@@ -35,38 +43,8 @@ runs:
       shell: bash
       run: |
         git lfs logs last || true
-
-    - name: Reset Working Copy
-      if: ${{ inputs.clean }} == 'false'
-      shell: bash
-      run: |
-        git clean -ffdx -e Library && git reset --hard HEAD
         
     - name: Git Status
       shell: bash
       run: |
         git status
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
