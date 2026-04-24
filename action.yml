@@ -19,17 +19,13 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - name: Clean git cashed
-      shell: bash
-      run: |
-        git rm --cached -r . || true
 
     - name: Reset Working Copy
       if: ${{ inputs.clean == 'false' }} 
       shell: bash
       run: |
-        # prevent fatal errors on fresh runners
-        git clean -ffdx -e Library || true        
+        # prevent fatal errors on fresh runners        
+        git clean -ffdx -e Library || true
         git reset --hard HEAD || true
         
     - name: Checkout
@@ -42,14 +38,20 @@ runs:
         clean: ${{ inputs.clean }}
         filter: ''
 
-    - name: Show last git logs
-      if: failure()
+    - name: Check for unresolved Git LFS pointer files
       shell: bash
       run: |
-        git lfs logs last || true
+        echo "Checking for Git LFS pointer files..."
+
+        if git grep -I "version https://git-lfs.github.com/spec/v1" -- .; then
+          echo ""
+          echo "ERROR: Found Git LFS pointer files instead of real files."
+          echo "This usually means Git LFS failed to download the actual content."
+          exit 1
+        fi
+        echo "OK: No Git LFS pointer files found."        
         
     - name: Git Status
       shell: bash
       run: |
         git status
-        git lfs fsck --pointers
