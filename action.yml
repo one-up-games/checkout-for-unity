@@ -37,7 +37,13 @@ runs:
         ref: ${{ inputs.ref }}
         clean: ${{ inputs.clean }}
         filter: ''
-
+        
+    - name: Clean git cashed
+      shell: bash
+      run: |
+        git rm --cached -r .
+        git reset --hard HEAD
+        
     - name: Check for unresolved Git LFS pointer files
       shell: bash
       run: |
