@@ -37,17 +37,30 @@ runs:
         ref: ${{ inputs.ref }}
         clean: ${{ inputs.clean }}
         filter: ''
-        
-    - name: Clean git cashed
-      shell: bash
-      run: |
-        git rm --cached -r .
-        git reset --hard HEAD
-        
+                
     - name: Check for unresolved Git LFS pointer files
+      id: lfs-check
       shell: bash
       run: |
         echo "Checking for Git LFS pointer files..."
+
+        if git grep -I "version https://git-lfs.github.com/spec/v1" -- .; then
+          echo ""
+          echo "ERROR: Found Git LFS pointer files instead of real files."
+          echo "This usually means Git LFS failed to download the actual content."
+          exit 1
+        fi
+        echo "OK: No Git LFS pointer files found."
+
+    - name: Fix for unresolved Git LFS pointer files
+      if: failure() && steps.lfs-check.outcome == 'failure'
+      shell: bash
+      run: |
+        echo "Fixing for unresolved Git LFS pointer files"
+        git rm --cached -r .
+        git reset --hard HEAD
+
+        echo "Checking for Git LFS pointer files after fix..."
 
         if git grep -I "version https://git-lfs.github.com/spec/v1" -- .; then
           echo ""
