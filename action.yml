@@ -39,36 +39,22 @@ runs:
         filter: ''
                 
     - name: Check for unresolved Git LFS pointer files
-      id: lfs-check
       shell: bash
       run: |
         echo "Checking for Git LFS pointer files..."
-
+    
         if git grep -I "version https://git-lfs.github.com/spec/v1" -- .; then
-          echo ""
-          echo "ERROR: Found Git LFS pointer files instead of real files."
-          echo "This usually means Git LFS failed to download the actual content."
-          exit 1
-        fi
-        echo "OK: No Git LFS pointer files found."
-
-    - name: Fix for unresolved Git LFS pointer files
-      if: failure() && steps.lfs-check.outcome == 'failure'
-      shell: bash
-      run: |
-        echo "Fixing for unresolved Git LFS pointer files"
-        git rm --cached -r .
-        git reset --hard HEAD
-
-        echo "Checking for Git LFS pointer files after fix..."
-
-        if git grep -I "version https://git-lfs.github.com/spec/v1" -- .; then
-          echo ""
-          echo "ERROR: Found Git LFS pointer files instead of real files."
-          echo "This usually means Git LFS failed to download the actual content."
-          exit 1
-        fi
-        echo "OK: No Git LFS pointer files found."        
+          echo "Fixing Git LFS..."
+    
+          git rm --cached -r .
+          git reset --hard HEAD
+    
+          echo "Re-checking..."
+    
+          ! git grep -I "version https://git-lfs.github.com/spec/v1" -- .
+        else
+          echo "OK: No Git LFS pointer files found."
+        fi  
         
     - name: Git Status
       shell: bash
